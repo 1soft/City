@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@client/core';
@@ -7,6 +7,7 @@ import { SharedMatComponent } from '../shared-mat-ui.module';
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'ui-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],

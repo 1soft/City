@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@client/core';
@@ -7,6 +7,7 @@ import { FormValidators } from '@client/utils';
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'ui-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
