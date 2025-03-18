@@ -56,6 +56,13 @@ docker exec -it mongo-container mongosh -u root -p rootpassword --authentication
 use admin;
 db.getUsers();
 
+
+### 5. Register 2 different users using strong password 
+**(1 numbers, 1 capital, 1 special char)**
+
+### 6. Login to use todo list 
+**(open each user in different tab/browser)**
+
 ## Nx Workspace Commands
 The Nx workspace facilitates efficient development through various commands:
 
