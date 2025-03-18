@@ -79,15 +79,17 @@ export class TasksService {
     });
   }
 
-  updateTask(task: ITask): Observable<ITask> {
+  updateTask(task: ITask, istoggle?: boolean): Observable<ITask> {
+    const type = istoggle ? tasksEvents.statusChanged : tasksEvents.edited;
+
     return this.manager.http.put<ITask>(`${this.baseUrl}/${task._id}`, task).pipe(
-      tap((updatedTask) => this.sendWebSocketUpdate(tasksEvents.edited, updatedTask))
+      tap((updatedTask) => this.sendWebSocketUpdate(type, updatedTask))
     );
   }
 
   toggleStatus(task: ITask): Observable<void> {
     return new Observable((observer) => {
-      this.manager.http.patch<void>(`${this.baseUrl}/${task._id}/status`, { status: task.done }).subscribe(() => {
+      this.manager.http.put<void>(`${this.baseUrl}/${task._id}`, task).subscribe(() => {
         this.sendWebSocketUpdate(tasksEvents.statusChanged, task);
         observer.next();
         observer.complete();

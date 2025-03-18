@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Signal, signal, WritableSignal} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, signal, WritableSignal} from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import { tasksEvents } from 'apps/todo/src/services/tasks/tasks.type';
 @Component({
   selector: 'tasks-page',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
   imports: [SharedMatComponent, MatCheckboxModule, FormsModule, MatDialogModule]
@@ -19,7 +20,6 @@ export class TasksComponent {
   private tasksService = inject(TasksService);
   private dialog = inject(MatDialog);
   public tasks: WritableSignal<ITask[]> = signal([]);
-  public hasTasks!: Signal<boolean>;
 
   // Convert Observable to Signal
   description = signal('');
@@ -64,17 +64,17 @@ export class TasksComponent {
       done: false,
     };
 
-    this.tasksService.addTask(newTask).subscribe(() => {
-      this.tasks.set([...this.tasks(), newTask]);
+    this.tasksService.addTask(newTask).subscribe((task) => {
+      this.tasks.set([...this.tasks(), task]);
       this.description.set(newTask.description);
     });
   }
 
   toggleStatus(task: ITask): void {
-    const updatedList = [...this.tasks()];
+    task.done = !task.done;
 
-    this.tasksService.updateTask(task).subscribe(() => {
-      this.tasks.set(updatedList);
+    this.tasksService.updateTask(task, true).subscribe(() => {
+      this.tasks.set([...this.tasks()]);
     });
   }
 
