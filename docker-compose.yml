@@ -1,0 +1,69 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  # MongoDB Database
+  mongodb:
+    build: ./db
+    container_name: mongo-container
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: tasksDB
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Deno Backend (Persistent + Debuggable)
+  backend:
+    build: ./server
+    container_name: deno-container
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"
+      - "9229:9229"  # Debugging port
+    environment:
+      - MONGO_URI=mongodb://root:rootpassword@mongo-container:27017/?authSource=admin
+      - JWT_SECRET=your-secret-key
+    volumes:
+      - ./server:/app
+      - deno_cache:/deno_cache
+    command: ["deno", "run", "--allow-net", "--allow-env", "--allow-read", "--allow-write", "--watch", "--inspect=0.0.0.0:9229", "server.ts"]
+
+  # Angular Frontend (Hot Reload + Debugging)
+  frontend:
+    build: ./client
+    container_name: angular-container
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    ports:
+      - "4200:4200"
+      - "9223:9223"  # Angular Debugging Port
+    volumes:
+      - ./client:/app  # Mount the local project for live reload
+      - /app/node_modules  # Ignore node_modules (prevent conflicts)
+    command: ["npx", "nx", "serve", "todo", "--host", "0.0.0.0", "--poll", "2000", "--open=false"]
+
+volumes:
+  mongodb_data:
+  deno_cache:

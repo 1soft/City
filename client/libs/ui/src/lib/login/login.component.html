@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-header>
+      <h2>User Login</h2>
+  </mat-card-header>
+  <mat-card-content>
+      <form class="form" [formGroup]="loginform" (ngSubmit)="proceedlogin()">
+          <mat-form-field class="full-width">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="email" >
+          </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput type="password" formControlName="password" >
+            </mat-form-field>
+          
+            <div>
+              <button mat-raised-button color="primary">Login</button>
+              <a routerLink="/register" mat-raised-button color="accent">Register Now!</a>
+            </div>
+        </form>
+  </mat-card-content>
+</mat-card>

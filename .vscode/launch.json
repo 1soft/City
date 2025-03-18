@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Attach to Angular in Docker",
+        "type": "node",
+        "request": "attach",
+        "port": 9223,
+        "restart": true,
+        "sourceMaps": true,
+        "outFiles": ["${workspaceFolder}/client/**/*.ts"],
+        "localRoot": "${workspaceFolder}/client",
+        "remoteRoot": "/app",
+        "skipFiles": ["<node_internals>/**"]
+      },
+      {
+        "name": "Attach to Deno in Docker",
+        "type": "node",
+        "request": "attach",
+        "port": 9229,
+        "restart": true,
+        "timeout": 10000,
+        "sourceMaps": true,
+        "outFiles": ["${workspaceFolder}/server/**/*.ts"],
+        "localRoot": "${workspaceFolder}/server",
+        "remoteRoot": "/app",
+        "skipFiles": ["<node_internals>/**"]
+      }
+    ]
+  }  

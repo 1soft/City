@@ -1,0 +1,12 @@
+FROM node:18 AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 4200 9229
+
+CMD ["npx", "nx", "serve", "todo", "--host", "0.0.0.0", "--poll", "2000", "--open=false"]

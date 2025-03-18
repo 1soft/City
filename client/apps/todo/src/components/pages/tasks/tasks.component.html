@@ -1,0 +1,59 @@
+<div class="container">
+  <mat-card appearance="outlined" class="card-layout">
+    <mat-card-header>
+      <mat-card-title>TODO List Project</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (selectedIndex() !== -1) {
+        <div class="error-container">
+          <p>You are in Editing Mode... You cannot perform actions on the existing list</p>
+        </div>
+      }
+
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Describe what to do?</mat-label>
+          <input #input
+            matInput
+            placeholder="Describe what to do?"
+            [value]="description()"
+            (input)="description.set(input.value)"
+          />
+          <button mat-icon-button matSuffix (click)="selectedIndex() !== -1 ? updateTask() : save()">
+            <mat-icon>{{ selectedIndex() !== -1 ? 'save_as' : 'save' }}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      @for(task of tasks(); track task._id) {
+        <div class="listing">
+          <div>
+            <mat-checkbox
+              (click)="toggleStatus(task)"
+              [checked]="task.done"
+              [disabled]="selectedIndex() !== -1"
+            >
+              <span [ngClass]="{ crossover: task.done }">{{ task.description }}</span>
+            </mat-checkbox>
+          </div>
+          @if (selectedIndex() === -1) {
+            <div>
+              @if (!task.done) {
+                <button mat-icon-button (click)="editTask(task)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+              <button mat-icon-button (click)="deleteConfirmation(task)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      } @empty {
+        <div class="error-container">
+          <p>No Tasks added</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

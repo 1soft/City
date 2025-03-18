@@ -1,0 +1,23 @@
+DOCKER:
+docker-compose up --build
+docker-compose down --rmi all
+
+
+MONGODB:
+docker exec -it mongo-container mongosh -u root -p rootpassword --authenticationDatabase admin
+
+use admin;
+db.getUsers();
+
+NX:
+npx nx g @nx/angular:library --directory=libs/utils
+npx nx g @nx/angular:component  --style=scss --standalone=true
+npx nx g @nx/angular:component  --style=scss --standalone=true
+nx g service services/tasks --project=todo
+
+path=libs/ui/src/lib/confirm/confirm
+
+npx nx g @nx/angular:component apps/todo/src/components/pages/tasks/tasks --changeDetection=OnPush
+port use:
+lsof -i :8000
+kill -9 <PID>

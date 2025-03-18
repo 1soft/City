@@ -1,0 +1,22 @@
+# Use official Deno base image
+FROM denoland/deno:1.40.0
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy only dependency files first for caching
+COPY deps.ts .
+
+# Cache dependencies (reduces rebuild times)
+RUN deno cache deps.ts
+
+# Copy the rest of the project (but will be overridden by volume)
+COPY . .
+
+# Expose ports:
+# 8000 -> API server
+# 9229 -> Deno Debugging
+EXPOSE 8000 9229
+
+# Run Deno in watch mode with debugging enabled
+CMD ["deno", "run", "--allow-net", "--allow-env", "--allow-read", "--allow-write", "--watch", "--inspect=0.0.0.0:9229", "server.ts"]
