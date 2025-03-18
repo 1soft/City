@@ -56,33 +56,41 @@ docker exec -it mongo-container mongosh -u root -p rootpassword --authentication
 use admin;
 db.getUsers();
 
-### Nx Workspace Commands
+## Nx Workspace Commands
 The Nx workspace facilitates efficient development through various commands:
 
 **Generate a Library: Create reusable code modules.**
+
 npx nx g @nx/angular:library --directory=libs/utils
 
 **Generate a Component: Add new components to the project.**
+
 npx nx g @nx/angular:component --style=scss --standalone=true
 
 **Generate a Service: Create services for business logic.**
+
 npx nx g service services/tasks --project=todo
 
 **Path Configuration: Specify paths for components or services.**
+
 path=libs/ui/src/lib/confirm/confirm
 
 **Generate a Component with OnPush Change Detection: Optimize component performance.**
+
 npx nx g @nx/angular:component apps/todo/src/components/pages/tasks/tasks --changeDetection=OnPush
 
 **Port Management**
+
 To identify processes using a specific port (e.g., port 8000):
+
 lsof -i :8000
 
 **Terminate a process occupying a port:**
+
 kill -9 <PID>
 Replace <PID> with the actual Process ID obtained from the previous command.
 
-### Additional Resources
+## Additional Resources
 Deno and JWT Authentication: For insights on implementing JWT authentication in Deno, refer to this guide.
 
 Authenticating Over WebSockets with JWT: For guidance on securing WebSocket connections using JWTs, consult this resource.
